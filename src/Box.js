@@ -1,19 +1,33 @@
 import React, { Component } from 'react';
-import ReactJson from 'react-json-view';
+import { v4 } from 'node-uuid';
 
-const data = [{name:"Root",children:
-                [{name:"One",children:
-                  [{name:"A1",children:
-                    [{name:"x"},
-                    {name:"y"}]
+const constData = [{id: "1", name:"Root",children:
+                [{id: "2", name:"One",children:
+                  [{id: "3", name:"A1",children:
+                    [{id: "4", name:"x", children: []},
+                    {id: "5", name:"y", children: []}]
                   }]
                 },
-                {name:"Two",children:
-                  [{name:"A2"}]
+                {id: "6", name:"Two",children:
+                  [{id: "7", name:"A2", children: []}]
                 }]
               }];
 
-class Box extends Component {
+function download(filename, text) {
+    var element = document.createElement('a');
+    element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
+    element.setAttribute('download', filename);
+
+    element.style.display = 'none';
+    document.body.appendChild(element);
+
+    element.click();
+
+    document.body.removeChild(element);
+}
+
+
+class List extends Component {
   constructor(props){
     super(props);
     this.state = {
@@ -31,7 +45,7 @@ class Box extends Component {
     var dataString = JSON.stringify(copy);
     var node = this.state.dataView;
     var nodeString = JSON.stringify(this.state.dataView);
-    node.children.push({name:"Three!"});
+    node.children.push({name:"New",children:[]});
     var updatedString = JSON.stringify(node);
     var newString = dataString.replace(nodeString, updatedString);
     console.log("dataString");
@@ -46,18 +60,9 @@ class Box extends Component {
       data: JSON.parse(newString),
       dataView: JSON.parse(updatedString)
     })
-    
-    
     localStorage.setItem("data", newString);
-    
   }
-  reload(){
-    
-    localStorage.setItem("data", JSON.stringify(data));
-    this.setState({
-      data: data
-    });
-  }
+  
   zoomer(i){
     console.log("last data");
     console.log(this.state.lastData);
@@ -71,10 +76,8 @@ class Box extends Component {
       lastData: newData,
     })
   }
-  saver(edit){
-    console.log("hello");
-    console.log(edit);
-    localStorage.setItem("data", JSON.stringify(edit.updated_src));
+  saver(){
+    localStorage.setItem("data", JSON.stringify(this.state.data));
     return true;
   }
   zoomOut(){
@@ -88,38 +91,266 @@ class Box extends Component {
       })
     }
   }
+  onTodoChange(value){
+          this.setState({
+               name: value
+          });
+      }
  
   render() {
     var root = this.state.dataView;
     return (
-      <div style={{flexGrow: 1, maxHeight: 400, margin: 1, maxWidth: this.state.maxWidth, border: this.state.border}}>
-          {/*<input style={{margin: 5}} placeholder={root.name}></input>
-          <button onClick={this.zoomOut.bind(this)}>X</button>
-          <button onClick={this.addBox.bind(this)}>+</button><button onClick={this.saver.bind(this)}>S</button>
-          <button onClick={this.reload.bind(this)}>R</button>
-          <br></br>
-          <div style={{display: 'flex', flexWrap: 'wrap', flexDirection: 'row'}}>
-          {root.children && root.children.map((item, i) => {
-            return <div onClick={this.zoomer.bind(this, i)} id={"child-"+i} style={{height: 50, margin: 1, minWidth: 200, flexGrow: 1, border: '3px solid blue', borderRadius: 20}}>{item.name}</div> 
-          })}
-          </div>*/} 
-          <ReactJson 
-            name={false}
-            defaultValue="yo"
-            onEdit={this.saver.bind(this)}
-            onAdd={this.saver.bind(this)}
-            onDelete={this.saver.bind(this)}
-            enableClipboard={false}
-            iconStyle="circle"
-            style={{height: '100%'}}
-            displayObjectSize={true}
-            displayDataTypes={false}
-            theme="rjv-default"
-            src={this.state.data} />
+      <div style={{flexGrow: 1, maxHeight: 400, margin: 1, textAlign: 'center', maxWidth: this.state.maxWidth, border: this.state.border}}>
+          
+          
 
           
       </div>
     );
+  }
+}
+
+class Item extends React.Component {
+  constructor(props){
+    super(props);
+    this.state = {
+      display: 'block',
+      displayCount: 'none'
+    }
+  }
+  addItem(){
+    var data = this.state.data;
+  }
+  showKids(){
+    this.setState({
+      display: 'block',
+      displayCount: 'none'
+    })
+  }
+  hideKids(){
+    this.setState({
+      display: 'none',
+      displayCount: 'block'
+    })
+  }
+  render() {
+    console.log("size");
+    console.log(this.props.kids);
+    return <div style={{flexGrow: 1, margin: 5, minWidth: 50, minHeight: 20}} id={this.props.id} className="item" >
+        <input onChange={this.props.handleChange.bind(this)}size={10} value={ this.props.name }></input>
+        <button onClick={this.props.addItem.bind(this)}>+</button>
+        <button onClick={this.props.removeItem.bind(this)}>-</button>
+        <button onClick={this.showKids.bind(this)}>Z</button>
+        <button onClick={this.hideKids.bind(this)}>H</button>
+        <span style={{display: this.state.displayCount}}>{this.props.kids} items</span>
+        <div className="kids" style={{display: this.state.display}}>
+          { this.props.children }
+        </div>
+    </div>
+  }
+}
+
+class FileSelector extends React.Component<undefined, undefined>
+{
+    constructor(props: any)
+    {
+        super(props);
+        this.state = {
+          data: this.props.data
+        }
+        this.handleChange = this.handleChange.bind(this);
+    }
+
+    handleChange(selectorFiles: FileList, callback)
+
+    {
+        console.log(selectorFiles);
+        function progressEvent(result){
+          this.setState({
+            data: result
+          })
+        }
+        var file = selectorFiles[0];
+        var reader = new FileReader();
+          reader.onload = function(progressEvent){
+            // Entire file
+            console.log(this.result);
+            callback(this.result);
+            
+          };
+          reader.readAsText(file);
+          
+          
+          
+    }
+
+    load(result){
+      console.log("LOAD");
+      console.log(result);
+      this.setState({
+        data: result
+      })
+    }
+
+    upload = () => {
+      var data = this.state.data;
+      this.props.upload(data);
+    }
+
+    render ()
+    {
+        return <div>
+            <input type="file" data={this.state.data} onChange={ (e) => this.handleChange(e.target.files, this.load.bind(this)) } />
+            <button onClick={this.upload}>Upload</button>
+        </div>;
+    }
+  }
+
+class Box extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      data: this.props.data
+    }
+    console.log("DATA");
+    console.log(this.state.data);
+  }  
+
+  saver(){
+    localStorage.setItem("data", JSON.stringify(this.state.data));
+    return true;
+  }
+
+  findObjectById(treeNodes, searchID, action) {
+    for (var nodeIdx = 0; nodeIdx <= treeNodes.length-1; nodeIdx++) {
+      if(treeNodes[nodeIdx] !== undefined && treeNodes[nodeIdx] !== null){
+              var currentNode = treeNodes[nodeIdx],
+                  currentId = currentNode.id,
+                  currentChildren = currentNode.children;
+              console.log("Comparing treeNodes element with ID==" + 
+                          currentId + " to SearchID==" + searchID);
+              if (currentId == searchID) {    
+                  console.log("Match!");
+                  if (action === "delete"){
+                    delete treeNodes[nodeIdx];
+                    return true;
+                  }
+                  return currentNode;
+              }
+              else {
+                  console.log("No Match! Trying " + currentChildren.length + 
+                              " Children of Node ID#" + currentId);
+                  var foundDescendant = this.findObjectById(currentChildren, searchID, action); 
+                  if (foundDescendant) {
+                      return foundDescendant;
+                  }
+              }
+          }
+        }
+        console.log("Done trying " + treeNodes.length + " children. Returning False");
+        return false;
+  };
+
+  addItem(node){
+    console.log(node);
+    var data = this.state.data;
+    console.log("pre data");
+    console.log(data);
+    var bla = this.findObjectById(data, node.id, "add");
+
+    console.log(bla);
+    bla.children.push({
+            name: "New",
+            id: v4(),
+            children: []
+    });
+    console.log(data);
+
+    this.setState({
+      data: data
+    })
+    this.saver();
+  }
+
+  handleChange(node, e){
+    console.log(node);
+    var data = this.state.data;
+    console.log("pre data");
+    console.log(data);
+    var bla = this.findObjectById(data, node.id, "change");
+
+    bla.name = e.target.value;
+    console.log(data);
+
+    this.setState({
+      data: data
+    })
+    this.saver();
+  }
+
+  removeItem(node){
+    console.log(node);
+    var data = this.state.data;
+    console.log("pre data");
+    console.log(data);
+    var bla = this.findObjectById(data, node.id, "delete");
+
+
+    console.log(data);
+
+    this.setState({
+      data: data
+    })
+    this.saver();
+  }
+
+  reload(){
+    localStorage.setItem("data", JSON.stringify(constData));
+    this.setState({
+      data: constData
+    });
+  }
+
+  upload = (data) => {
+    console.log("upload data");
+    console.log(JSON.parse(data));
+    this.setState({
+      data: JSON.parse(data)
+    })
+    console.log(this.state.data);
+    this.saver();
+  }
+
+  download(){
+    download("cluttr-stuffr.txt", JSON.stringify(this.state.data));
+  }
+  
+  list(data) {
+    const children = (children) => {
+      if (children) {
+        return <div className="list" style={{margin: 5, minWidth: 50, minHeight: 20, border: '2px solid black', borderRadius: 10, display: 'flex', flexDirection: 'row'}}>{ this.list(children) }</div>
+      }
+    }
+    
+    return data.map((node, index) => {
+      if(node !== null){
+      return <Item key={ node.id }  kids={node.children.length} handleChange={this.handleChange.bind(this, node)} removeItem={this.removeItem.bind(this, node)} addItem={this.addItem.bind(this, node)} id={ node.id } name={ node.name }>
+        { children(node.children) }
+      </Item>
+    }
+    })
+  }
+  
+  render() {
+    console.log("v4");
+    console.log(v4());
+    return <div className="render">
+      { this.props.data !== null ? this.list(this.props.data) : false}
+      <button onClick={this.download.bind(this)}>Download</button>
+      <button onClick={this.saver.bind(this)}>S</button>
+      <button onClick={this.reload.bind(this)}>R</button>
+      <FileSelector data={this.props.data} upload={this.upload} />
+    </div>
   }
 }
 

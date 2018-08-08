@@ -3,17 +3,17 @@ import logo from './logo.svg';
 import './App.css';
 import Box from './Box';
 
-// const data = [{name:"Root",children:
-//                 [{name:"One",children:
-//                   [{name:"A1",children:
-//                     [{name:"x"},
-//                     {name:"y"}]
-//                   }]
-//                 },
-//                 {name:"Two",children:
-//                   [{name:"A2"}]
-//                 }]
-//               }];
+const data = [{id: "1", name:"Root",children:
+                [{id: "2", name:"One",children:
+                  [{id: "3", name:"A1",children:
+                    [{id: "4", name:"x", children: []},
+                    {id: "5", name:"y", children: []}]
+                  }]
+                },
+                {id: "6", name:"Two",children:
+                  [{id: "7", name:"A2", children: []}]
+                }]
+              }];
 function flatten(array, depth) {
   return array.reduce((p, c, i, a) => {
     if (c.children) {
@@ -39,8 +39,9 @@ class App extends Component {
           <img src={logo} className="App-logo" alt="logo" />
           <h1 className="App-title">Cluttr Stuffr</h1>
         </header>
-        <div style={{margin: 50, display: "none"}}>
+        <div style={{margin: 50, display: "block"}}>
           <Box data={data} display="block" height="100%" maxWidth="100%" border="none"/>
+
         </div>
       </div>
     );

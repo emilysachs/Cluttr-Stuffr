@@ -4,10 +4,11 @@
   "private": true,
   "dependencies": {
     "ajv": "^6.5.2",
+    "node-uuid": "^1.4.8",
     "react": "^16.4.2",
     "react-dom": "^16.4.2",
     "react-json-tree": "^0.11.0",
-    "react-json-view": "^1.19.1",
+    "react-json-view": "https://github.com/emilysachs/react-json-view/tarball/master",
     "react-scripts": "1.1.4"
   },
   "scripts": {
