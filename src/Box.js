@@ -226,16 +226,20 @@ class Box extends React.Component {
   }
 
   removeItem(node){
-    if (window.confirm('Are you sure you wish to delete this item?')){
-      var data = this.state.data;
-      var bla = this.findObjectById(data, node.id, "delete", data);
-      var parent = this.findObjectById(data, bla.id, "add", data);
-      bla = bla.children.filter(n => n.id !== node.id);
-      parent.children = bla;
-      this.setState({
-        data: data
-      })
-      this.saver(data);
+    if (node.id === "1"){
+      window.alert('Root node cannot be deleted');
+    } else {
+      if (window.confirm('Are you sure you wish to delete this item?')){
+        var data = this.state.data;
+        var bla = this.findObjectById(data, node.id, "delete", data);
+        var parent = this.findObjectById(data, bla.id, "add", data);
+        bla = bla.children.filter(n => n.id !== node.id);
+        parent.children = bla;
+        this.setState({
+          data: data
+        })
+        this.saver(data);
+      }
     }
   }
 
@@ -248,13 +252,14 @@ class Box extends React.Component {
   }
 
   focusOff(node){
-    console.log(node);
-    var data = this.state.data;
-    var bla = this.findObjectById(data, node.id, "delete", data);
-    bla = this.findObjectById(data, bla.id, "add", data);
-    this.setState({
-      dataView: [bla],
-    })
+    if (node.id !== "1"){
+      var data = this.state.data;
+      var bla = this.findObjectById(data, node.id, "delete", data);
+      bla = this.findObjectById(data, bla.id, "add", data);
+      this.setState({
+        dataView: [bla],
+      })
+    }
   }
 
   reload(){
@@ -308,12 +313,16 @@ class Box extends React.Component {
     return <div className="render">
       { this.state.dataView !== null ? this.list(this.state.dataView) : false}
       <FileSelector data={this.props.data} upload={this.upload} />
-      <div style={{float: "right"}}>
-        <button style={{float: "right"}} onClick={this.reload.bind(this)}>Load sample data</button>
+      <div style={{float: "left", clear: "both"}}>
+        <button style={{float: "left"}} onClick={this.reload.bind(this)}>Load sample data</button>
         <br></br>
-        <button style={{float: "right"}} onClick={this.download.bind(this)}>Export your data</button>
+        <button style={{float: "left"}} onClick={this.download.bind(this)}>Export your data</button>
       </div>
+      <span style={{clear: "both"}} className="mobile">Using an iPhone? To save data for future use, click Export and then copy all of the text to your notes. Save the file to iCloud as a .txt file.</span>
+      <br></br>
+      <a style={{float: "right", clear: "both", textDecoration: "none", color: "white"}} href="http://emilysachs.com">emilysachs.com</a>
     </div>
+
   }
 }
 

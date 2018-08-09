@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "ajv": "^6.5.2",
+    "gh-pages": "^1.2.0",
     "node-uuid": "^1.4.8",
     "react": "^16.4.2",
     "react-dom": "^16.4.2",
@@ -11,10 +12,12 @@
     "react-json-view": "https://github.com/emilysachs/react-json-view/tarball/master",
     "react-scripts": "1.1.4"
   },
+  "homepage": "http://emilysachs.github.io/Cluttr-Stuffr",
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "deploy": "gh-pages -d build"
   }
 }

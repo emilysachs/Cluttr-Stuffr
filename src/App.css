@@ -57,6 +57,18 @@ button, input[type="file"] button {
   font-size: large;
 }
 
+.mobile {
+  display: block;
+  float: left;
+  text-align: left;
+}
+
+@media(min-width: 600px){
+  .mobile {
+    display: none;
+  }
+}
+
 @keyframes sock-left-spin {
   from { transform: rotate(0deg) scaleX(-1); }
   to { transform: rotate(360deg) scaleX(-1); }
