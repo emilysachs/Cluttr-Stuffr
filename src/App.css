@@ -2,71 +2,67 @@
   text-align: center;
 }
 
-.App-logo {
-  animation: App-logo-spin infinite 20s linear;
-  height: 80px;
+.sock--left {
+  animation: sock-left-spin infinite 20s linear;
+  height: 40px;
+  padding: 20px;
 }
 
-.variable-row > span, .brace-row, .array-key, .icon-container + span, .icon-container + span + span {
-  display: none !important;
+.sock--right {
+  animation: sock-right-spin infinite 20s linear;
+  height: 40px;
+  padding: 20px;
 }
 
-.variable-value .string-value {
-  color: black;
-  font-size: 24px;
-  font-family: sans-serif;
+i.material-icons {
+  font-size: 18px;
+  cursor: pointer;
 }
 
-.variable-row + .object-key-val > .pushed-content > .object-content {
-  display: flex;
-  flex-wrap: wrap;
-  flex-direction: row;
-}
-.pushed-content .pushed-content .object-key-val:first-child span, .pushed-content .pushed-content .object-key-val + .object-key-val span {
-  flex-grow: 0;
-}
-
-.pushed-content .pushed-content .object-key-val:first-child > .pushed-content, .pushed-content .pushed-content .object-key-val + .object-key-val > .pushed-content {
-  border: 4px solid black;
-  border-left: 4px solid black !important;
-  flex-grow: 1;
-  min-width: 200px;
-  max-width: 500px;
-}
-
-.pushed-content .pushed-content
-
-
-
-.object-key-val > span .object-size  {
-  display: none;
-}
-
-.variable-row + .object-key-val > span {
-  display: block;
+input {
+  font-size: 20px;
   border: none;
+  text-align: center;
+  background-color: inherit;
 }
 
-.collapsed-icon {
-  display: block;
+.list {
+  background-color: rgba(0, 0, 0, .05);
 }
 
 .App-header {
-  background-color: #222;
+  background-color: #ffffff;
   height: 150px;
   padding: 20px;
-  color: white;
+  color: black;
+  height: auto;
 }
 
 .App-title {
-  font-size: 1.5em;
+  font-size: 2em;
+}
+
+button, input[type="file"] button {
+  background-color: white;
+  color: black;
+  margin: 5px 0px;
+  padding: 5px 10px;
+  border: none;
+  border-radius: 5px;
+  font-size: 20px;
+  cursor: pointer;
 }
 
 .App-intro {
   font-size: large;
 }
 
-@keyframes App-logo-spin {
+@keyframes sock-left-spin {
+  from { transform: rotate(0deg) scaleX(-1); }
+  to { transform: rotate(360deg) scaleX(-1); }
+}
+
+@keyframes sock-right-spin {
   from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+  to { transform: rotate(-360deg); }
 }

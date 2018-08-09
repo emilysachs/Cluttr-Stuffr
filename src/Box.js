@@ -1,121 +1,65 @@
 import React, { Component } from 'react';
 import { v4 } from 'node-uuid';
 
-const constData = [{id: "1", name:"Root",children:
-                [{id: "2", name:"One",children:
-                  [{id: "3", name:"A1",children:
-                    [{id: "4", name:"x", children: []},
-                    {id: "5", name:"y", children: []}]
-                  }]
-                },
-                {id: "6", name:"Two",children:
-                  [{id: "7", name:"A2", children: []}]
-                }]
-              }];
+const constData = [{id: "1", name:"Home",children:
+[{id: "2", name:"Bedroom",children:
+[{id: "3", name:"Dresser",children:
+[{id: "4", name:"Drawer 1", children: []},
+{id: "5", name:"Drawer 2", children: [
+{id: "8", name:"White Shirt", children: []}, 
+{id: "9", name:"Black Shirt", children: []}, 
+{id: "10", name:"Blue Shirt", children: []}]}]
+}]
+},
+{id: "6", name:"Kitchen",children:
+[{id: "7", name:"Fridge", children: []}]
+}]
+}];
+
+const constData2 = [{"id":"1","name":"Travel","children":
+[{"id":"2","name":"Canada","children":[{"id":"3","name":"Alberta","children":
+[{"id":"4","name":"Jasper","children":[]},{"id":"5","name":"Banff","children":
+[{"id":"8","name":"Lake Louise","children":[]},{"id":"9","name":"Moraine Lake","children":[]},
+{"id":"10","name":"Bow Falls","children":[]}]},{"name":"Icefields Parkway","id":"1fce0f33-e4d9-4ee7-aa4b-93c3a8501b11",
+"children":[{"name":"Athabasca Glacier","id":"a3daf8d1-e0ea-4a9f-8969-49c7c46d75c0","children":[]}]}]},
+{"name":"Toronto","id":"605c5fcc-1fd7-4947-8d76-e9814835f627","children":
+[{"name":"Food","id":"ec21cd7e-4b52-489f-bcbe-84e83ea9eb4a","children":
+[{"name":"Rolled Ice Cream","id":"e8a5e1e0-de15-4f48-b92a-93d1222d5442","children":[]},
+{"name":"Poutine","id":"73acfb1b-6c96-4aa3-ae5d-608f92c3a359","children":[]}]}]}]},
+{"id":"6","name":"LA Trip","children":[{"id":"7","name":"Malibu","children":
+[{"name":"El Matador","id":"d601deac-f452-4fbe-b2f0-ecf1490d4b8e","children":[]},
+{"name":"Cafe Habana","id":"7098d6bb-c5c3-4bb2-a613-febaad2416cc","children":[]},
+{"name":"Nobu","id":"144822f6-3f71-499b-9412-8c1163c7a4f3","children":[]},
+{"name":"Malibu Farm","id":"31784bbb-08be-493e-a98f-d904d054923d","children":[]},
+{"name":"Duke's","id":"613b217b-e28f-4760-98f6-b9a9353c1cb7","children":[]},
+{"name":"Point Dume","id":"3fe82676-c089-42fc-99ed-c894edd8b228","children":[]}]},
+{"name":"West Hollywood","id":"9ac338ff-4c26-4337-bf6f-be401dade051","children":
+[{"name":"Alfred's","id":"40d5688e-c8db-4b06-be0d-0e3818abf954","children":[]},
+{"name":"Pink Wall","id":"64df2531-af71-4619-987f-222bc0504bc9","children":[]}]},
+{"name":"Museums","id":"46655ad3-a4a9-4242-abd5-d675c6aa97bf","children":
+[{"name":"LACMA","id":"d59f204b-e218-4d65-a166-9e05ebffa3aa","children":[]},
+{"name":"The Broad","id":"9476f85d-51ec-4079-ab2a-dd1cdcb531bb","children":[]},
+{"name":"The Getty","id":"b61879ea-6e1e-4aa4-91ea-4c15abc5628d","children":[]}]},
+{"name":"Runyon Canyon","id":"2f7782eb-1b44-4e46-acb4-ff68057e0219","children":[]},
+{"name":"Rodeo Drive","id":"9d4e4635-6e8b-4f23-9f8f-d3915fae147b","children":[]}]}]}]
 
 function download(filename, text) {
     var element = document.createElement('a');
     element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
     element.setAttribute('download', filename);
-
     element.style.display = 'none';
     document.body.appendChild(element);
-
     element.click();
-
     document.body.removeChild(element);
-}
-
-
-class List extends Component {
-  constructor(props){
-    super(props);
-    this.state = {
-      bins: [],
-      data: this.props.data,
-      dataView: this.props.data[0],
-      lastData: [],
-      height: this.props.height,
-      maxWidth: this.props.maxWidth,
-      border: this.props.border,
-    }
-  }
-  addBox(){
-    var copy = this.state.data;
-    var dataString = JSON.stringify(copy);
-    var node = this.state.dataView;
-    var nodeString = JSON.stringify(this.state.dataView);
-    node.children.push({name:"New",children:[]});
-    var updatedString = JSON.stringify(node);
-    var newString = dataString.replace(nodeString, updatedString);
-    console.log("dataString");
-    console.log(dataString);
-    console.log("nodeString");
-    console.log(nodeString);
-    console.log("updatedString");
-    console.log(updatedString);
-    console.log("newString");
-    console.log(newString);
-    this.setState({
-      data: JSON.parse(newString),
-      dataView: JSON.parse(updatedString)
-    })
-    localStorage.setItem("data", newString);
-  }
-  
-  zoomer(i){
-    console.log("last data");
-    console.log(this.state.lastData);
-    console.log(this.state.data);
-    console.log(this.state.data.children);
-    console.log(this.state.data[0]);
-    var newData = this.state.lastData;
-    newData.unshift(this.state.dataView)
-    this.setState({
-      dataView: this.state.dataView.children[i],
-      lastData: newData,
-    })
-  }
-  saver(){
-    localStorage.setItem("data", JSON.stringify(this.state.data));
-    return true;
-  }
-  zoomOut(){
-    if(this.state.lastData.length > 0){
-      var back = this.state.lastData[0];
-      var newData = this.state.lastData;
-      newData.shift();
-      this.setState({
-        dataView: back,
-        lastData: newData
-      })
-    }
-  }
-  onTodoChange(value){
-          this.setState({
-               name: value
-          });
-      }
- 
-  render() {
-    var root = this.state.dataView;
-    return (
-      <div style={{flexGrow: 1, maxHeight: 400, margin: 1, textAlign: 'center', maxWidth: this.state.maxWidth, border: this.state.border}}>
-          
-          
-
-          
-      </div>
-    );
-  }
 }
 
 class Item extends React.Component {
   constructor(props){
     super(props);
     this.state = {
-      display: 'block',
-      displayCount: 'none'
+      display: this.props.kids < 6 || this.props.id === "1" ? 'block' : 'none',
+      displayCount: this.props.kids < 6 || this.props.id === "1" ? 'none' : 'block',
+      expanded: this.props.kids < 6 || this.props.id === "1" ? true : false,
     }
   }
   addItem(){
@@ -124,25 +68,46 @@ class Item extends React.Component {
   showKids(){
     this.setState({
       display: 'block',
-      displayCount: 'none'
+      displayCount: 'none',
+      expanded: true,
     })
   }
   hideKids(){
     this.setState({
       display: 'none',
-      displayCount: 'block'
+      displayCount: 'block',
+      expanded: false
     })
   }
+  zoom(){
+    this.showKids.bind(this);
+    this.props.focusOnMe();
+  }
+
   render() {
-    console.log("size");
-    console.log(this.props.kids);
-    return <div style={{flexGrow: 1, margin: 5, minWidth: 50, minHeight: 20}} id={this.props.id} className="item" >
-        <input onChange={this.props.handleChange.bind(this)}size={10} value={ this.props.name }></input>
-        <button onClick={this.props.addItem.bind(this)}>+</button>
-        <button onClick={this.props.removeItem.bind(this)}>-</button>
-        <button onClick={this.showKids.bind(this)}>Z</button>
-        <button onClick={this.hideKids.bind(this)}>H</button>
-        <span style={{display: this.state.displayCount}}>{this.props.kids} items</span>
+    var expand;
+    if (!this.state.expanded) {
+          expand = <i className="material-icons" onClick={this.showKids.bind(this)}>expand_less</i>;
+        } else {
+          expand = <i className="material-icons" onClick={this.hideKids.bind(this)}>expand_more</i>
+        }
+    return <div style={{flexGrow: 1, padding: 5, minWidth: '20%', minWidth: 50, minHeight: 20}} id={this.props.id} className="item" >
+        <input onChange={this.props.handleChange.bind(this)} size={this.props.name.length + 1} value={ this.props.name }></input>
+        <br></br>
+        <i className="material-icons" onClick={this.props.addItem.bind(this)}>
+          playlist_add
+        </i>
+        <i className="material-icons" onClick={this.props.removeItem.bind(this)}>
+          delete_outline
+        </i>
+        {expand}
+        <i className="material-icons" onClick={this.zoom.bind(this)}>
+          zoom_out_map
+        </i>
+        <i className="material-icons" onClick={this.props.focusOff.bind(this)}>
+          arrow_back
+        </i>
+        <span onClick={this.showKids.bind(this)} style={{display: this.state.displayCount}}>{this.props.kids} item(s)</span>
         <div className="kids" style={{display: this.state.display}}>
           { this.props.children }
         </div>
@@ -160,11 +125,9 @@ class FileSelector extends React.Component<undefined, undefined>
         }
         this.handleChange = this.handleChange.bind(this);
     }
-
     handleChange(selectorFiles: FileList, callback)
 
     {
-        console.log(selectorFiles);
         function progressEvent(result){
           this.setState({
             data: result
@@ -174,19 +137,13 @@ class FileSelector extends React.Component<undefined, undefined>
         var reader = new FileReader();
           reader.onload = function(progressEvent){
             // Entire file
-            console.log(this.result);
             callback(this.result);
             
           };
-          reader.readAsText(file);
-          
-          
-          
+          reader.readAsText(file);         
     }
 
     load(result){
-      console.log("LOAD");
-      console.log(result);
       this.setState({
         data: result
       })
@@ -199,9 +156,10 @@ class FileSelector extends React.Component<undefined, undefined>
 
     render ()
     {
-        return <div>
-            <input type="file" data={this.state.data} onChange={ (e) => this.handleChange(e.target.files, this.load.bind(this)) } />
-            <button onClick={this.upload}>Upload</button>
+        return <div style={{float: "left"}} >
+            <input type="file" style={{fontSize: 12}} data={this.state.data} onChange={ (e) => this.handleChange(e.target.files, this.load.bind(this)) } />
+            <br></br>
+            <button style={{float: "left"}} onClick={this.upload}>Import your data</button>
         </div>;
     }
   }
@@ -210,115 +168,111 @@ class Box extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      data: this.props.data
+      data: this.props.data,
+      dataView: this.props.data
     }
-    console.log("DATA");
-    console.log(this.state.data);
   }  
 
-  saver(){
-    localStorage.setItem("data", JSON.stringify(this.state.data));
+  saver(data){
+    localStorage.setItem("data", JSON.stringify(data));
     return true;
   }
 
-  findObjectById(treeNodes, searchID, action) {
+  findObjectById(treeNodes, searchID, action, lastNode) {
     for (var nodeIdx = 0; nodeIdx <= treeNodes.length-1; nodeIdx++) {
       if(treeNodes[nodeIdx] !== undefined && treeNodes[nodeIdx] !== null){
               var currentNode = treeNodes[nodeIdx],
                   currentId = currentNode.id,
                   currentChildren = currentNode.children;
-              console.log("Comparing treeNodes element with ID==" + 
-                          currentId + " to SearchID==" + searchID);
               if (currentId == searchID) {    
-                  console.log("Match!");
-                  if (action === "delete"){
-                    delete treeNodes[nodeIdx];
-                    return true;
+                  if (action === "delete"){ 
+                    return lastNode;
                   }
                   return currentNode;
               }
               else {
-                  console.log("No Match! Trying " + currentChildren.length + 
-                              " Children of Node ID#" + currentId);
-                  var foundDescendant = this.findObjectById(currentChildren, searchID, action); 
+                  var foundDescendant = this.findObjectById(currentChildren, searchID, action, treeNodes[nodeIdx]); 
                   if (foundDescendant) {
                       return foundDescendant;
                   }
               }
           }
         }
-        console.log("Done trying " + treeNodes.length + " children. Returning False");
         return false;
   };
 
   addItem(node){
-    console.log(node);
     var data = this.state.data;
-    console.log("pre data");
-    console.log(data);
-    var bla = this.findObjectById(data, node.id, "add");
-
-    console.log(bla);
+    var bla = this.findObjectById(data, node.id, "add", data);
     bla.children.push({
             name: "New",
             id: v4(),
             children: []
     });
-    console.log(data);
-
     this.setState({
-      data: data
+      data: data,
     })
-    this.saver();
+    this.saver(data);
   }
 
   handleChange(node, e){
-    console.log(node);
     var data = this.state.data;
-    console.log("pre data");
-    console.log(data);
-    var bla = this.findObjectById(data, node.id, "change");
-
+    var bla = this.findObjectById(data, node.id, "change", data);
     bla.name = e.target.value;
-    console.log(data);
-
     this.setState({
       data: data
     })
-    this.saver();
+    this.saver(data);
   }
 
   removeItem(node){
+    if (window.confirm('Are you sure you wish to delete this item?')){
+      var data = this.state.data;
+      var bla = this.findObjectById(data, node.id, "delete", data);
+      var parent = this.findObjectById(data, bla.id, "add", data);
+      bla = bla.children.filter(n => n.id !== node.id);
+      parent.children = bla;
+      this.setState({
+        data: data
+      })
+      this.saver(data);
+    }
+  }
+
+  focusOnMe(node){
+    var data = this.state.data;
+    var bla = this.findObjectById(data, node.id, "add", data);
+    this.setState({
+      dataView: [bla],
+    })
+  }
+
+  focusOff(node){
     console.log(node);
     var data = this.state.data;
-    console.log("pre data");
-    console.log(data);
-    var bla = this.findObjectById(data, node.id, "delete");
-
-
-    console.log(data);
-
+    var bla = this.findObjectById(data, node.id, "delete", data);
+    bla = this.findObjectById(data, bla.id, "add", data);
     this.setState({
-      data: data
+      dataView: [bla],
     })
-    this.saver();
   }
 
   reload(){
-    localStorage.setItem("data", JSON.stringify(constData));
+    var sample = Math.floor(Math.random() * 2) == 0 ? constData : constData2;
+    localStorage.setItem("data", JSON.stringify(sample));
     this.setState({
-      data: constData
+      data: sample,
+      dataView: sample
     });
   }
 
   upload = (data) => {
-    console.log("upload data");
-    console.log(JSON.parse(data));
+    data = JSON.parse(data)
     this.setState({
-      data: JSON.parse(data)
+      data: data,
+      dataView: data
     })
-    console.log(this.state.data);
-    this.saver();
+    this.saver(data);
   }
 
   download(){
@@ -326,15 +280,24 @@ class Box extends React.Component {
   }
   
   list(data) {
+    if(!data.map){
+      data = data.children;
+    }
     const children = (children) => {
-      if (children) {
-        return <div className="list" style={{margin: 5, minWidth: 50, minHeight: 20, border: '2px solid black', borderRadius: 10, display: 'flex', flexDirection: 'row'}}>{ this.list(children) }</div>
+      if (children.length > 0) {
+        return <div className="list" style={{margin: 5, minWidth: 50, minHeight: 20, border: '2px solid black', borderRadius: 10, display: 'flex', flexWrap: 'wrap', flexDirection: 'row'}}>{ this.list(children) }</div>
       }
     }
-    
     return data.map((node, index) => {
       if(node !== null){
-      return <Item key={ node.id }  kids={node.children.length} handleChange={this.handleChange.bind(this, node)} removeItem={this.removeItem.bind(this, node)} addItem={this.addItem.bind(this, node)} id={ node.id } name={ node.name }>
+      return <Item key={ node.id }  
+                    kids={node.children.length} 
+                    handleChange={this.handleChange.bind(this, node)} 
+                    removeItem={this.removeItem.bind(this, node)} 
+                    focusOnMe={this.focusOnMe.bind(this, node)}
+                    focusOff={this.focusOff.bind(this, node)}
+                    addItem={this.addItem.bind(this, node)} 
+                    id={ node.id } name={ node.name }>
         { children(node.children) }
       </Item>
     }
@@ -342,14 +305,14 @@ class Box extends React.Component {
   }
   
   render() {
-    console.log("v4");
-    console.log(v4());
     return <div className="render">
-      { this.props.data !== null ? this.list(this.props.data) : false}
-      <button onClick={this.download.bind(this)}>Download</button>
-      <button onClick={this.saver.bind(this)}>S</button>
-      <button onClick={this.reload.bind(this)}>R</button>
+      { this.state.dataView !== null ? this.list(this.state.dataView) : false}
       <FileSelector data={this.props.data} upload={this.upload} />
+      <div style={{float: "right"}}>
+        <button style={{float: "right"}} onClick={this.reload.bind(this)}>Load sample data</button>
+        <br></br>
+        <button style={{float: "right"}} onClick={this.download.bind(this)}>Export your data</button>
+      </div>
     </div>
   }
 }
