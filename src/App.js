@@ -17,7 +17,7 @@ const data = [{id: "1", name:"Root",children:
 
 class App extends Component {
   render() {
-    var data = JSON.parse(localStorage.getItem("data")) ? JSON.parse(localStorage.getItem("data")) : data;
+    var data = JSON.parse(localStorage.getItem("data"));
     return (
       <div className="App" style={{display: 'flex',flexDirection: 'column', }}>
         <header className="App-header" style={{display: 'flex', justifyContent: 'center'}}>

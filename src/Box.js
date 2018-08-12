@@ -91,7 +91,7 @@ class Item extends React.Component {
         } else {
           expand = <i className="material-icons" onClick={this.hideKids.bind(this)}>expand_more</i>
         }
-    return <div style={{flexGrow: 1, padding: 5, minWidth: '20%', minWidth: 50, minHeight: 20}} id={this.props.id} className="item" >
+    return <div style={{flexGrow: 1, padding: 5, minWidth: '20%', minHeight: 20}} id={this.props.id} className="item" >
         <input onChange={this.props.handleChange.bind(this)} size={this.props.name.length + 1} value={ this.props.name }></input>
         <br></br>
         <i className="material-icons" onClick={this.props.addItem.bind(this)}>
@@ -310,10 +310,25 @@ class Box extends React.Component {
   }
   
   render() {
+    if(this.props.data === null){
+      var data = constData;
+    }
     return <div className="render">
       { this.state.dataView !== null ? this.list(this.state.dataView) : false}
       <FileSelector data={this.props.data} upload={this.upload} />
-      <div style={{float: "left", clear: "both"}}>
+      <ul style={{listStyleType: "none", width: 300, textAlign: "right", float: "right"}}>
+        <li><i className="material-icons">playlist_add</i> 
+        Add item within current item</li>
+        <li><i className="material-icons">delete_outline</i> 
+        Delete current item</li>
+        <li><i className="material-icons">expand_less</i>
+        Expand/collapse current item</li>
+        <li><i className="material-icons">zoom_out_map</i> 
+        Zoom to current item</li>
+        <li><i className="material-icons">arrow_back</i> 
+        Go to enclosing item</li>
+      </ul>
+      <div style={{float: "left"}}>
         <button style={{float: "left"}} onClick={this.reload.bind(this)}>Load sample data</button>
         <br></br>
         <button style={{float: "left"}} onClick={this.download.bind(this)}>Export your data</button>
