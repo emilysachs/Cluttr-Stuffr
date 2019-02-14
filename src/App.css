@@ -1,5 +1,21 @@
+/* General & Header */
+
 .App {
   text-align: center;
+  display: flex;
+  flex-direction: column;
+}
+
+#boxWrapper {
+  margin: 10px 50px;
+  display: block;
+}
+
+#headerBox {
+  max-width: 400px;
+  margin: 0px;
+  display: flex;
+  flex-direction: row;
 }
 
 .sock--left {
@@ -24,10 +40,6 @@ input {
   border: none;
   text-align: center;
   background-color: inherit;
-}
-
-.list {
-  background-color: rgba(0, 0, 0, .05);
 }
 
 .App-header {
@@ -57,18 +69,6 @@ button, input[type="file"] button {
   font-size: large;
 }
 
-.mobile {
-  display: block;
-  float: left;
-  text-align: left;
-}
-
-@media(min-width: 600px){
-  .mobile {
-    display: none;
-  }
-}
-
 @keyframes sock-left-spin {
   from { transform: rotate(0deg) scaleX(-1); }
   to { transform: rotate(360deg) scaleX(-1); }
@@ -77,4 +77,78 @@ button, input[type="file"] button {
 @keyframes sock-right-spin {
   from { transform: rotate(0deg); }
   to { transform: rotate(-360deg); }
+}
+
+/* Box */
+
+#dataSave {
+  float: left;
+}
+
+#dataSave button {
+  float: left;
+}
+
+.list {
+  background-color: rgba(0, 0, 0, .05);
+  margin: 5px;
+  min-width: 50px;
+  min-height: 20px;
+  border: 2px solid black;
+  border-radius: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+}
+
+#legend {
+  list-style-type: none;
+  width: 300px;
+  text-align: right;
+  float: right;
+}
+
+#mobile {
+  display: block;
+  float: left;
+  text-align: left;
+  clear: both;
+}
+
+#website {
+  float: right;
+  clear: both;
+  text-decoration: none;
+  color: white;
+}
+
+/* Item */
+
+.item {
+  flex-grow: 1;
+  padding: 5px;
+  min-width: 20%;
+  min-height: 20px;
+}
+
+/* File Selector */
+
+#fileSelector {
+  float: left;
+}
+
+#fileSelector button {
+  float: left;
+}
+
+#fileSelector input {
+  font-size: 12px;
+}
+
+/* Responsive */
+
+@media(min-width: 600px){
+  #mobile {
+    display: none;
+  }
 }

@@ -1,33 +1,24 @@
 import React, { Component } from 'react';
 import logo from './sock.svg';
 import './App.css';
-import Box from './Box';
+import Box from './components/Box/Box.js';
+import sampleData from './sampleData.js';
 
-const data = [{id: "1", name:"Root",children:
-                [{id: "2", name:"One",children:
-                  [{id: "3", name:"A1",children:
-                    [{id: "4", name:"x", children: []},
-                    {id: "5", name:"y", children: []}]
-                  }]
-                },
-                {id: "6", name:"Two",children:
-                  [{id: "7", name:"A2", children: []}]
-                }]
-              }];
+const data = sampleData.startData; // need to fix to avoid crash without using duplicate variable while fetching localStorage
 
 class App extends Component {
   render() {
     var data = JSON.parse(localStorage.getItem("data"));
     return (
-      <div className="App" style={{display: 'flex',flexDirection: 'column', }}>
+      <div className="App">
         <header className="App-header" style={{display: 'flex', justifyContent: 'center'}}>
-          <div style={{maxWidth: 400, margin: 0, display: 'flex', flexDirection: 'row'}}>
+          <div id="headerBox">
             <img src={logo} className="sock--left" alt="sock" />
             <h1 className="App-title">Cluttr Stuffr</h1>
             <img src={logo} className="sock--right" alt="sock" />
           </div>
         </header>
-        <div style={{margin: "10px 50px", display: "block"}}>
+        <div id="boxWrapper">
           <Box data={data} display="block" height="100%" maxWidth="100%" border="none"/>
 
         </div>
