@@ -183,15 +183,15 @@ class Box extends Component {
       <FileSelector data={this.props.data} upload={this.upload} />
       <ul id="legend">
         <li><i className="material-icons">playlist_add</i> 
-        Add item within current item</li>
+        Add item as child of current item</li>
         <li><i className="material-icons">delete_outline</i> 
         Delete current item</li>
         <li><i className="material-icons">expand_less</i>
-        Expand/collapse current item</li>
+        Expand/collapse children of current item</li>
         <li><i className="material-icons">zoom_out_map</i> 
-        Zoom to current item</li>
+        Zoom to view from context of current item</li>
         <li><i className="material-icons">arrow_back</i> 
-        Go to enclosing item</li>
+        Go to view from context of enclosing item</li>
       </ul>
       <div id="dataSave">
         <button onClick={this.reload.bind(this)}>Load sample data</button>

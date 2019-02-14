@@ -20,7 +20,6 @@ class App extends Component {
         </header>
         <div id="boxWrapper">
           <Box data={data} display="block" height="100%" maxWidth="100%" border="none"/>
-
         </div>
       </div>
     );
